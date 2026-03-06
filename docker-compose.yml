@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # Основное приложение (твой NestJS сервис)
+  api-gateway:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+      - DATABASE_URL=postgresql://user:pass@postgres:5432/analytics_db
+      - DATABASE_HOST=postgres
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - rabbitmq
+      - postgres
+      - redis
+
+  # Очередь сообщений
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"   # Порт для протокола AMQP
+      - "15672:15672" # Панель управления (логин/пароль: guest/guest)
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # База данных для аналитики
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: analytics_db
+    ports:
+      - "5432:5432"
+
+  # Redis для Rate Limiting и кэширования
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
