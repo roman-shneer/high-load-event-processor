@@ -63,6 +63,9 @@ curl -X POST http://localhost:3000/events/track \
      }'
 ```
 
+<img width="738" height="331" alt="image" src="https://github.com/user-attachments/assets/48f39d91-5c20-4bbf-92a4-82a474b87600" />
+
+
 ### Monitoring
 RabbitMQ Management: http://localhost:15672 (guest/guest)
 
