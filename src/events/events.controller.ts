@@ -1,5 +1,6 @@
-import { Controller, Post, Body, Inject, HttpStatus, HttpCode } from '@nestjs/common';
+import { Controller, Post, Body, Inject, HttpStatus, HttpCode, UseGuards } from '@nestjs/common';
 import { ClientProxy, MessagePattern, Payload, Ctx, RmqContext } from '@nestjs/microservices'
+import { ThrottlerGuard } from '@nestjs/throttler';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AnalyticsEvent } from './entities/event.entity';
@@ -12,6 +13,7 @@ export class EventsController {
         private readonly eventRepository: Repository<AnalyticsEvent>,
     ) { }
 
+    @UseGuards(ThrottlerGuard)
     @Post('track')
     @HttpCode(HttpStatus.ACCEPTED) // return 202 Accepted
     async trackEvent(@Body() data: AnalyticsEventDto) {
