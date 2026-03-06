@@ -25,11 +25,12 @@ This project demonstrates a classic **Event-Driven Architecture** to solve commo
 
 ## 💎 Key Engineering Features
 
-
-*   **Validation Pipe:** Strict DTO validation with class-validator to ensure only clean data enters the pipeline.
-*   **Manual RMQ Acknowledgments:** Prevents message loss if the Consumer or Database fails during processing.
-*   **Multi-stage Docker Build:** Optimized Dockerfile for small and secure production images.
-*   **Graceful Shutdown:** Handles system signals to close database and queue connections properly.
+*   **Distributed Rate Limiting:** Implemented via **Redis** and `ThrottlerGuard` to prevent API abuse and ensure system stability across multiple service instances.
+*   **Event-Driven Architecture:** Decoupled API Gateway from the Database using **RabbitMQ**, allowing the system to handle massive traffic spikes without data loss.
+*   **Manual RMQ Acknowledgments:** Configured manual `ack/nack` strategy to guarantee that messages are only removed from the queue after successful DB persistence.
+*   **PostgreSQL JSONB Optimization:** Specialized schema using `jsonb` for analytical payloads, combining the flexibility of NoSQL with the reliability of SQL.
+*   **Strict Type Safety:** 100% TypeScript coverage with automated DTO validation via `class-validator` and `ValidationPipe`.
+*   **Resilient Infrastructure:** Multi-stage Docker builds and automated health checks to ensure reliable service orchestration.
 
 
 ## 🚦 Getting Started
