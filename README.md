@@ -65,4 +65,5 @@ curl -X POST http://localhost:3000/events/track \
 
 ### Monitoring
 RabbitMQ Management: http://localhost:15672 (guest/guest)
+
 Postgres: Connect via DBeaver/pgAdmin on port 5432
