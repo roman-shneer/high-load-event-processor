@@ -1,21 +1,21 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm'; // Добавляем импорт
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
-    // Конфигурация подключения к PostgreSQL
+    // config PostgreSQL
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DATABASE_HOST || 'localhost', // Берем из Docker или localhost
+      host: process.env.DATABASE_HOST || 'localhost',
       port: 5432,
-      username: 'user', // Из твоего docker-compose
-      password: 'pass', // Из твоего docker-compose
-      database: 'analytics_db', // Из твоего docker-compose
-      autoLoadEntities: true,   // Автоматически регистрирует файлы .entity.ts
-      synchronize: true,        // Создает таблицы сам (только для разработки!)
+      username: 'user',
+      password: 'pass',
+      database: 'analytics_db',
+      autoLoadEntities: true,   // Automatically registers .entity.ts files
+      synchronize: true,        // Creates tables automatically (only for development, disable in production)
     }),
     EventsModule,
   ],

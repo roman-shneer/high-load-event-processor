@@ -6,12 +6,12 @@ import { Transport } from '@nestjs/microservices';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Включаем глобальную валидацию
+  // global validation
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,        // Удаляет из запроса поля, которых нет в DTO
-      forbidNonWhitelisted: true, // Выдает ошибку, если прислали лишние поля
-      transform: true,        // Автоматически преобразует типы (например, строку в число)
+      whitelist: true,        // Removes fields from the request that are not in the DTO
+      forbidNonWhitelisted: true, // Throws an error if additional fields are sent
+      transform: true,        // Automatically transforms types (e.g., string to number)
     }),
   );
 
@@ -21,11 +21,11 @@ async function bootstrap() {
       urls: [process.env.RABBITMQ_URL || 'amqp://localhost:5672'],
       queue: 'analytics_queue',
       queueOptions: { durable: true },
-      noAck: false, // Важно для Senior: подтверждаем получение вручную
+      noAck: false, //confirm receipt manually
     },
   });
 
-  await app.startAllMicroservices(); // Запускаем прослушку очереди
+  await app.startAllMicroservices(); // We start listening to the queue
 
   await app.listen(3000);
   console.log(`Application is running on: ${await app.getUrl()}`);

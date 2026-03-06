@@ -8,14 +8,14 @@ import { AnalyticsEventDto } from './dto/analytics-event.dto';
 export class EventsController {
     constructor(
         @Inject('ANALYTICS_SERVICE') private readonly client: ClientProxy,
-        @InjectRepository(AnalyticsEvent) // Внедряем репозиторий Postgres
+        @InjectRepository(AnalyticsEvent) // inject repository for Postgres
         private readonly eventRepository: Repository<AnalyticsEvent>,
     ) { }
 
     @Post('track')
-    @HttpCode(HttpStatus.ACCEPTED) // Возвращаем 202: "Принято в обработку"
+    @HttpCode(HttpStatus.ACCEPTED) // return 202 Accepted
     async trackEvent(@Body() data: AnalyticsEventDto) {
-        // Отправляем в RabbitMQ без ожидания завершения бизнес-логики (Fire and Forget)
+        // Sending to RabbitMQ without waiting for business logic to complete (Fire and Forget)
         this.client.emit('event_received', {
             ...data,
             receivedAt: new Date().toISOString(),
@@ -25,7 +25,7 @@ export class EventsController {
     }
 
 
-    @MessagePattern('event_received') // Имя паттерна должно совпадать с тем, что в emit
+    @MessagePattern('event_received') 
     async handleEvent(@Payload() data: any, @Ctx() context: RmqContext) {
         const channel = context.getChannelRef();
         const originalMsg = context.getMessage();
@@ -35,40 +35,41 @@ export class EventsController {
             console.log('Event Type:', data.eventType);
             console.log('Payload:', data.payload);
 
-            // Имитация записи в БД (здесь будет твой DB Service)
+            // dbsave
             await this.saveToDatabase(data);
 
-            // ПОДТВЕРЖДАЕМ (Acknowledge), что сообщение обработано успешно
+            //  ACKNOWLEDGE that the message has been processed successfully.
             channel.ack(originalMsg);
             console.log('Event Processed and Acknowledged');
 
         } catch (error) {
             console.error('Error processing event:', error.message);
-            // Если ошибка — возвращаем в очередь (Nack), чтобы попробовать позже
+            // if error - return to queue (Nack), for retry later.
             channel.nack(originalMsg, false, true);
         }
     }
 
     private async saveToDatabase(data: any) {
-        // Тут логика TypeORM или Prisma
-        //return new Promise((resolve) => setTimeout(resolve, 100));
+
+        //return new Promise((resolve) => setTimeout(resolve, 100)); // Simulate some processing delay (for testing purposes)
+
         try {
-            // Создаем экземпляр сущности из полученных данных
+            //  create an instance of an entity from the received data
             const event = this.eventRepository.create({
                 sessionId: data.sessionId,
                 eventType: data.eventType,
                 payload: data.payload,
-                // createdAt заполнится автоматически благодаря @CreateDateColumn
+                // createdAt will be filled automatically by @CreateDateColumn
             });
 
-            // Сохраняем в PostgreSQL
+            // save to PostgreSQL
             const savedEvent = await this.eventRepository.save(event);
             console.log(`Event saved to DB with ID: ${savedEvent.id}`);
 
             return savedEvent;
         } catch (error) {
             console.error('Database Save Error:', error.message);
-            throw error; // Бросаем ошибку выше, чтобы сработал nack в RabbitMQ
+            throw error;// Throw the error above to trigger nack in RabbitMQ
         }
     }
 

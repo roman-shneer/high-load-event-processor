@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 
-@Entity('analytics_events') // Имя таблицы в Postgres
+@Entity('analytics_events') // table_name in Postgres
 export class AnalyticsEvent {
     @PrimaryGeneratedColumn() // Авто-инкремент ID
     id: number;
@@ -11,10 +11,9 @@ export class AnalyticsEvent {
     @Column()
     eventType: string;
 
-    // Использование jsonb — это Senior-level подход в Postgres для гибких данных
     @Column({ type: 'jsonb', nullable: true })
     payload: Record<string, any>;
 
-    @CreateDateColumn() // Автоматическая дата создания
+    @CreateDateColumn() // Automatically populated with the creation date
     createdAt: Date;
 }

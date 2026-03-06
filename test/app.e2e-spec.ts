@@ -25,7 +25,7 @@ describe('Events (e2e)', () => {
         payload: { button: 'buy' },
         timestamp: new Date().toISOString(),
       })
-      .expect(202) // Ожидаем наш Accepted
+      .expect(202) // We are waiting for our Accepted
       .expect((res) => {
         expect(res.body.status).toBe('queued');
       });
@@ -35,7 +35,7 @@ describe('Events (e2e)', () => {
     return request(app.getHttpServer())
       .post('/events/track')
       .send({ eventType: 'click' })
-      .expect(400); // Ожидаем ошибку валидации
+      .expect(400); // expecting a validation error.
   });
 
   afterAll(async () => {
