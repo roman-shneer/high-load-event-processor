@@ -48,13 +48,13 @@ docker-compose up --build
 ```
 
 
-### The API will be available at http://localhost:3000.
+### The API will be available at http://127.0.0.1:3000.
 ## 🧪 Testing the Pipeline
 
 Send a Tracking Event
 ```
 bash
-curl -X POST http://localhost:3000/events/track \
+curl -X POST http://127.0.0.1:3000/events/track \
      -H "Content-Type: application/json" \
      -d '{
        "sessionId": "550e8400-e29b-41d4-a716-446655440000",
@@ -68,6 +68,19 @@ curl -X POST http://localhost:3000/events/track \
 
 
 ### Monitoring
-RabbitMQ Management: http://localhost:15672 (guest/guest)
+RabbitMQ Management: http://127.0.0.1:15672 (guest/guest)
 
 Postgres: Connect via DBeaver/pgAdmin on port 5432
+
+## Graphana
+
+http://127.0.0.1:3001/
+
+user:admin
+password:admin
+Import graphana_dashboard.json
+
+## Perfomance test
+artillery run perfomance/main.yml
+
+artillery run perfomance/insert1m.yml
