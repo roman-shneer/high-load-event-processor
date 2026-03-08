@@ -64,25 +64,31 @@ curl -X POST http://127.0.0.1:3000/events/track \
      }'
 ```
 
-<img width="738" height="331" alt="image" src="https://github.com/user-attachments/assets/48f39d91-5c20-4bbf-92a4-82a474b87600" />
+<img width="720" height="464" alt="image" src="https://github.com/user-attachments/assets/c6b324c8-774b-4b47-bada-bd6f882947cc" />
 
+## Perfomance test
+artillery run perfomance/main.yml
+<img width="834" height="758" alt="image" src="https://github.com/user-attachments/assets/cc6e5580-c2c2-40c6-b3af-e4b0eea53c58" />
+
+
+artillery run perfomance/insert1m.yml
+<img width="818" height="920" alt="image" src="https://github.com/user-attachments/assets/68d5b8f9-15a5-4401-ad4e-44b84dc9b1f8" />
 
 ### Monitoring
 RabbitMQ Management: http://127.0.0.1:15672 (guest/guest)
 
 Postgres: Connect via DBeaver/pgAdmin on port 5432
 
-## Graphana
+#### Graphana
 http://127.0.0.1:3001/
 Add connection http://prometheus:9090
 
-
-
 user:admin
+
 password:admin
+
 Import graphana_dashboard.json
 
-## Perfomance test
-artillery run perfomance/main.yml
+<img width="1518" height="744" alt="image" src="https://github.com/user-attachments/assets/b563d5a9-d711-4526-9477-553b20992e1b" />
 
-artillery run perfomance/insert1m.yml
+
