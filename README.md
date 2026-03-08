@@ -73,8 +73,10 @@ RabbitMQ Management: http://127.0.0.1:15672 (guest/guest)
 Postgres: Connect via DBeaver/pgAdmin on port 5432
 
 ## Graphana
-
 http://127.0.0.1:3001/
+Add connection http://prometheus:9090
+
+
 
 user:admin
 password:admin

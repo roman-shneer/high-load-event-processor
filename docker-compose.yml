@@ -3,10 +3,7 @@ version: '3.8'
 services:
   # NESTJS API Gateway
   api-gateway:
-    build: .
-    #volumes:
-    #  - .:/app
-    #  - /app/node_modules
+    build: .    
     ports:
       - "3000:3000"
     environment:
@@ -14,6 +11,7 @@ services:
       - DATABASE_URL=postgresql://user:pass@postgres:5432/analytics_db
       - DATABASE_HOST=postgres
       - REDIS_URL=redis://redis:6379
+      - NODE_OPTIONS=--max-old-space-size=1024
     depends_on:
       - rabbitmq
       - postgres
@@ -41,11 +39,12 @@ services:
     ports:
       - "5432:5432"
 
-  # Redis для Rate Limiting и caching
+  # Redis for Rate Limiting and caching
   redis:
     image: redis:7-alpine
     ports:
       - "6379:6379"
+  ## prometheus
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -53,13 +52,13 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
-
+  ## graphana
   grafana:
     image: grafana/grafana
     container_name: grafana
     ports:
-      - "3001:3000" # Grafana будет доступна на порту 3001
+      - "3001:3000"
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin # Пароль для входа
-      - GF_SERVER_ROOT_URL=http://127.0.0.1:3001
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SERVER_ROOT_URL=http://localhost:3001
       - GF_SECURITY_ALLOW_EMBEDDING=true
