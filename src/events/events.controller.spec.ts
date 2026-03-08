@@ -15,6 +15,16 @@ describe('EventsController', () => {
             providers: [
                 { provide: 'ANALYTICS_SERVICE', useValue: clientProxy },
                 { provide: 'AnalyticsEventRepository', useValue: {} }, // Mock repository if needed
+                {
+                    provide: 'PROM_METRIC_ARTILLERY_EVENTS_RECEIVED_TOTAL',
+                    useValue: {
+                        inc: jest.fn(), // Plug for metric increment method
+                    },
+                },
+                {
+                    provide: 'PROM_METRIC_SOME_OTHER_METRIC',
+                    useValue: { inc: jest.fn(), observe: jest.fn() },
+                },
             ],
         }).compile();
 
