@@ -1,9 +1,12 @@
 version: '3.8'
 
 services:
-  # Основное приложение (твой NestJS сервис)
+  # NESTJS API Gateway
   api-gateway:
     build: .
+    #volumes:
+    #  - .:/app
+    #  - /app/node_modules
     ports:
       - "3000:3000"
     environment:
@@ -16,19 +19,19 @@ services:
       - postgres
       - redis
 
-  # Очередь сообщений
+  # Pool of worker services
   rabbitmq:
     image: rabbitmq:3-management
     ports:
-      - "5672:5672"   # Порт для протокола AMQP
-      - "15672:15672" # Панель управления (логин/пароль: guest/guest)
+      - "5672:5672"   # port for AMQP
+      - "15672:15672" # Management panel (login/password: guest/guest)
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "check_running"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-  # База данных для аналитики
+  # DB
   postgres:
     image: postgres:15
     environment:
@@ -38,8 +41,25 @@ services:
     ports:
       - "5432:5432"
 
-  # Redis для Rate Limiting и кэширования
+  # Redis для Rate Limiting и caching
   redis:
     image: redis:7-alpine
     ports:
       - "6379:6379"
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3001:3000" # Grafana будет доступна на порту 3001
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin # Пароль для входа
+      - GF_SERVER_ROOT_URL=http://127.0.0.1:3001
+      - GF_SECURITY_ALLOW_EMBEDDING=true

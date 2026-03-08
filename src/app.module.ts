@@ -22,7 +22,7 @@ import Redis from 'ioredis';
     }),
     EventsModule,
     ThrottlerModule.forRoot({
-      throttlers: [{ limit: 10, ttl: 60000 }], // 10 requests per minute per IP/ID
+      throttlers: [{ limit: 1000000, ttl: 60000 }], // 10 requests per minute per IP/ID
       storage: new ThrottlerStorageRedisService(
         new Redis(process.env.REDIS_URL || 'redis://localhost:6379')
       ),

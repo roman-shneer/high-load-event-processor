@@ -1,0 +1,28 @@
+config:
+  target: "http://127.0.0.1:3000"
+  http:    
+    pool: 100 
+    timeout: 10
+  phases:    
+    - duration: 1
+      arrivalCount: 1000000
+      name: "Send 1M events"  
+  payload:
+    path: "./data/test-data.csv"
+    fields:
+      - "sessionId"
+    order: cyclic
+scenarios:
+  - name: "Send analytical event"
+    flow:
+      - post:
+          url: "/events/track"          
+          headers:
+            Connection: "keep-alive"
+          json:
+            sessionId: "{{ sessionId }}"
+            eventType: "load_test_event"
+            payload:
+              browser: "Chrome"
+              performance: "tested"
+            timestamp: "2026-03-07T10:00:00Z"

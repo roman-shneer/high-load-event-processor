@@ -1,0 +1,35 @@
+config:
+  target: "http://127.0.0.1:3000"
+  http:
+    # 1. ВКЛЮЧАЕМ ПУЛ (Это самое важное!)
+    # Теперь Artillery откроет только 100 соединений и будет 
+    # гонять через них все запросы. Ошибки портов исчезнут.
+    pool: 100 
+    timeout: 10
+  phases:
+    - duration: 60
+      arrivalRate: 50
+      rampTo: 300
+      name: "Warm up"
+    - duration: 300
+      arrivalRate: 500
+      name: "Sustained high load" 
+  payload:
+    path: "./data/test-data.csv"
+    fields:
+      - "sessionId"
+    order: cyclic
+scenarios:
+  - name: "Send analytical event"
+    flow:
+      - post:
+          url: "/events/track"        
+          headers:
+            Connection: "keep-alive"
+          json:
+            sessionId: "{{ sessionId }}"
+            eventType: "load_test_event"
+            payload:
+              browser: "Chrome"
+              performance: "tested"
+            timestamp: "2026-03-07T10:00:00Z"
