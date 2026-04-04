@@ -96,7 +96,8 @@ A real-time dashboard built with React that connects to the NestJS backend via W
 *   **Stress Test** — simulates high-concurrency traffic spikes
 *   Live status indicator shows test progress in real-time
 
-<!-- Add dashboard screenshot here -->
+<img width="820" height="1094" alt="image" src="https://github.com/user-attachments/assets/949c7f08-6e4e-4664-9f42-d5c9ea3e9707" />
+
 
 ---
 
