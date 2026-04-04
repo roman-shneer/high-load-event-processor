@@ -55,10 +55,9 @@ docker-compose up --build
 
 | Service | URL |
 |---------|-----|
-| **API Gateway** | http://127.0.0.1:3000 |
-| **React Dashboard** | http://127.0.0.1:3001 |
+| **React Dashboard & API Gateway** | http://127.0.0.1:3000 |
 | **RabbitMQ Management** | http://127.0.0.1:15672 (guest/guest) |
-| **Grafana** | http://127.0.0.1:3002 (admin/admin) |
+| **Grafana** | http://127.0.0.1:3001 (admin/admin) |
 | **PostgreSQL** | port 5432 (DBeaver/pgAdmin) |
 
 ---
@@ -120,7 +119,7 @@ Postgres: Connect via DBeaver/pgAdmin on port 5432
 
 #### Graphana
 
-http://127.0.0.1:3002/
+http://127.0.0.1:3001/
 Add connection http://prometheus:9090
 
 user: admin
