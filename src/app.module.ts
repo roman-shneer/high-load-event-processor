@@ -33,7 +33,7 @@ import { TestsModule } from './tests/tests.module';
       ),
     }),
     ServeStaticModule.forRoot({
-      // Указываем путь к папке dist, которую создал Vite
+
       rootPath: join(__dirname, '..', 'client', 'dist'),
     }),
     ScheduleModule.forRoot(),

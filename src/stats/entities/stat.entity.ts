@@ -9,23 +9,23 @@ export class RabbitStat {
     @Column()
     queueName: string;
 
-    @Column('float', { default: 0 }) // Используем float для скоростей
+    @Column('float', { default: 0 })
     publishRate: number;
 
     @Column('float', { default: 0 })
     deliverRate: number;
 
     @Column('float', { default: 0 })
-    postgresCpu: number; // В процентах (например, 15.5)
+    postgresCpu: number; 
 
     @Column('float', { default: 0 })
-    postgresRam: number; // В Мегабайтах (например, 256.0)
+    postgresRam: number;
 
     @Column('float', { default: 0 })
-    appCpu: number; // В процентах (например, 15.5)
+    appCpu: number; 
 
     @Column('float', { default: 0 })
-    appRam: number; // В Мегабайтах (например, 256.0)
+    appRam: number;
 
     @CreateDateColumn()
     createdAt: Date;

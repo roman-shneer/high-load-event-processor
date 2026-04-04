@@ -11,17 +11,17 @@ export class TestsService {
         if (this.artilleryProcess) return { status: 'Already running' };
         const configPath = join(process.cwd(), 'performance', filename);
 
-        // Запускаем процесс
+
         this.artilleryProcess = spawn('npx', ['artillery', 'run', configPath]);
 
-        // БЕЗОПАСНАЯ ПРОВЕРКА: stdout может быть null, если процесс не запустился
+
         if (this.artilleryProcess.stdout) {
             this.artilleryProcess.stdout.on('data', (data) => {
                 this.logger.log(`Artillery Output: ${data.toString()}`);
             });
         }
 
-        // То же самое для stderr (ошибки)
+
         if (this.artilleryProcess.stderr) {
             this.artilleryProcess.stderr.on('data', (data) => {
                 this.logger.error(`Artillery Error: ${data.toString()}`);

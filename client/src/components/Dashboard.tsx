@@ -8,19 +8,18 @@ export const Dashboard = () => {
 
   const [appData, setAppData] = useState([]);
 
-  const fetchStats = async () => {
-    try {
-      const response = await fetch('/api/stats');
-      const stats = await response.json();
-      // Преобразуем дату для красивого отображения на оси X
-      const formattedData = stats.map((s: any) => ({
+  const getStatsStream = () => {
+    const es = new EventSource('/api/stats/stream');
+    es.onmessage = (e) => {
+      const stats = JSON.parse(e.data);
+       const formattedData = stats.map((s: any) => ({
         ...s,
         id: s.id,
         queueName: s.queueName,
         publishRate: s.publishRate,
         deliverRate: s.deliverRate,
         time: new Date(s.createdAt).toLocaleTimeString(),
-      })).reverse(); // Переворачиваем, чтобы новые данные были справа
+      })).reverse(); 
       
       setData(formattedData);
 
@@ -30,7 +29,7 @@ export const Dashboard = () => {
        postgresCpu: s.postgresCpu,
        postgresRam: s.postgresRam,
         time: new Date(s.createdAt).toLocaleTimeString(),
-      })).reverse(); // Переворачиваем, чтобы новые данные были справа
+      })).reverse();
       setPostgresData(formattedPostgresData);
 
 
@@ -40,21 +39,21 @@ export const Dashboard = () => {
        appCpu: s.appCpu,
        appRam: s.appRam,
         time: new Date(s.createdAt).toLocaleTimeString(),
-      })).reverse(); // Переворачиваем, чтобы новые данные были справа
+      })).reverse(); 
       setAppData(formattedAppData);
 
+    };
 
-      
+    es.onerror = () => {
+      console.error('SSE connection lost, retrying...');
+    };
 
-    } catch (error) {
-      console.error("Error fetching stats:", error);
-    }
+     // Cleanup on unmount
+    return () => es.close();
   };
 
   useEffect(() => {
-    fetchStats();
-    const interval = setInterval(fetchStats, 5000); // Обновляем каждые 5 сек
-    return () => clearInterval(interval);
+    getStatsStream();
   }, []);
 
   return (

@@ -18,7 +18,7 @@ This project demonstrates a classic **Event-Driven Architecture** to solve commo
 *   **Backend:** Node.js, TypeScript, NestJS
 *   **Message Broker:** RabbitMQ (using @nestjs/microservices)
 *   **Database:** PostgreSQL (TypeORM)
-*   **Monitoring Dashboard:** React (real-time WebSocket)
+*   **Monitoring Dashboard:** React (real-time via Server-Sent Events)
 *   **Infrastructure:** Docker, Docker Compose
 *   **Caching/Rate Limiting:** Redis
 
@@ -32,7 +32,7 @@ This project demonstrates a classic **Event-Driven Architecture** to solve commo
 *   **PostgreSQL JSONB Optimization:** Specialized schema using `jsonb` for analytical payloads, combining the flexibility of NoSQL with the reliability of SQL.
 *   **Strict Type Safety:** 100% TypeScript coverage with automated DTO validation via `class-validator` and `ValidationPipe`.
 *   **Resilient Infrastructure:** Multi-stage Docker builds and automated health checks to ensure reliable service orchestration.
-*   **Real-Time React Dashboard:** Live monitoring of RabbitMQ, PostgreSQL, and Application performance via WebSocket — with browser-triggered load tests.
+*   **Real-Time React Dashboard:** Live monitoring of RabbitMQ, PostgreSQL, and Application performance via **Server-Sent Events (SSE)** — with browser-triggered load tests.
 
 ---
 
@@ -84,7 +84,7 @@ curl -X POST http://127.0.0.1:3000/events/track \
 
 ## 📊 React Monitoring Dashboard
 
-A real-time dashboard built with React that connects to the NestJS backend via WebSocket.
+A real-time dashboard built with React that streams live metrics from the NestJS backend via **Server-Sent Events (SSE)** — a single persistent HTTP connection that pushes updates every second without polling overhead.
 
 **Live Charts:**
 *   **RabbitMQ Performance** — messages/sec throughput in real-time
@@ -97,7 +97,6 @@ A real-time dashboard built with React that connects to the NestJS backend via W
 *   Live status indicator shows test progress in real-time
 
 <img width="820" height="1094" alt="image" src="https://github.com/user-attachments/assets/949c7f08-6e4e-4664-9f42-d5c9ea3e9707" />
-
 
 ---
 

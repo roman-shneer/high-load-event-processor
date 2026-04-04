@@ -11,8 +11,8 @@ import { Counter } from 'prom-client';
 @Controller('events')
 export class EventsController {
     private eventBuffer: any[] = [];
-    private readonly BATCH_SIZE = 500; // Оптимально для PostgreSQL
-    private readonly FLUSH_INTERVAL = 5000; // Сбрасывать каждые 5 сек, если буфер не заполнился
+    private readonly BATCH_SIZE = 500;
+    private readonly FLUSH_INTERVAL = 5000; 
 
 
     constructor(
@@ -45,18 +45,12 @@ export class EventsController {
         const originalMsg = context.getMessage();
 
         try {
-            /*
-            console.log('--- Processing Event ---');
-            console.log('Event Type:', data.eventType);
-            console.log('Payload:', data.payload);
-            */
+
             // dbsave
             await this.saveToDatabase(data);
 
             //  ACKNOWLEDGE that the message has been processed successfully.
             channel.ack(originalMsg);
-            /*console.log('Event Processed and Acknowledged');*/
-
         } catch (error) {
             console.error('Error processing event:', error.message);
             // if error - return to queue (Nack), for retry later.
@@ -68,7 +62,7 @@ export class EventsController {
         if (this.eventBuffer.length === 0) return;
 
         const itemsToSave = [...this.eventBuffer];
-        this.eventBuffer = []; // Очищаем основной буфер сразу
+        this.eventBuffer = []; 
 
         try {
             await this.eventRepository
@@ -86,7 +80,6 @@ export class EventsController {
 
     private async saveToDatabase(data: any) {
 
-        //await new Promise(resolve => setTimeout(resolve, 1000)); //temporary disabled - its should cause for overwriting pool
         this.eventBuffer.push(data);
 
         if (this.eventBuffer.length >= this.BATCH_SIZE) {

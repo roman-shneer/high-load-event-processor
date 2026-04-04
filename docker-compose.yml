@@ -15,7 +15,7 @@ services:
       - NODE_OPTIONS=--max-old-space-size=1024
     depends_on:
       rabbitmq:
-        condition: service_healthy # Ждем, пока RabbitMQ будет полностью готов
+        condition: service_healthy 
       postgres:
         condition: service_started
       redis:

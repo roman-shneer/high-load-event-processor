@@ -1,7 +1,5 @@
 scrape_configs:
   - job_name: 'nestjs-app'
-    scrape_interval: 5s # Как часто забирать метрики
-    static_configs:
-      # Если NestJS запущен локально (не в докере), используйте host.docker.internal
-      # Если NestJS в докере, укажите имя его сервиса
+    scrape_interval: 5s
+    static_configs:     
       - targets: ['host.docker.internal:3000'] 
