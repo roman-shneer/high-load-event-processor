@@ -1,11 +1,16 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EventsModule } from './events/events.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 import Redis from 'ioredis';
+import { join } from 'path';
+import { StatsModule } from './stats/stats.module';
+import { TestsModule } from './tests/tests.module';
 
 @Module({
   imports: [
@@ -27,6 +32,13 @@ import Redis from 'ioredis';
         new Redis(process.env.REDIS_URL || 'redis://localhost:6379')
       ),
     }),
+    ServeStaticModule.forRoot({
+      // Указываем путь к папке dist, которую создал Vite
+      rootPath: join(__dirname, '..', 'client', 'dist'),
+    }),
+    ScheduleModule.forRoot(),
+    StatsModule,
+    TestsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

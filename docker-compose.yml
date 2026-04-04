@@ -8,14 +8,20 @@ services:
       - "3000:3000"
     environment:
       - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+      - RABBITMQ_HTTP_URL=http://guest:guest@rabbitmq:15672/api/queues/%2F/analytics_queue
       - DATABASE_URL=postgresql://user:pass@postgres:5432/analytics_db
       - DATABASE_HOST=postgres
       - REDIS_URL=redis://redis:6379
       - NODE_OPTIONS=--max-old-space-size=1024
     depends_on:
-      - rabbitmq
-      - postgres
-      - redis
+      rabbitmq:
+        condition: service_healthy # Ждем, пока RabbitMQ будет полностью готов
+      postgres:
+        condition: service_started
+      redis:
+        condition: service_started
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
   # Pool of worker services
   rabbitmq:

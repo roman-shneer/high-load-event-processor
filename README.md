@@ -1,9 +1,7 @@
 # High-Load Event Processor (NestJS + RabbitMQ + PostgreSQL)
 
-
-
 ### 🚀 Senior Node.js Showcase Project
-A production-ready microservice architecture designed to handle high-frequency analytical events with guaranteed delivery, rate limiting, and efficient data persistence.
+A production-ready microservice architecture designed to handle high-frequency analytical events with guaranteed delivery, rate limiting, and efficient data persistence — now with a **real-time React monitoring dashboard**.
 
 ---
 
@@ -14,14 +12,17 @@ This project demonstrates a classic **Event-Driven Architecture** to solve commo
 *   **Reliability:** Implements manual Acknowledgments (ack/nack) to ensure zero data loss during processing.
 *   **Flexible Schema:** Leverages PostgreSQL JSONB for storing unstructured analytical payloads while maintaining SQL performance.
 
+---
 
 ## 🛠 Tech Stack
 *   **Backend:** Node.js, TypeScript, NestJS
 *   **Message Broker:** RabbitMQ (using @nestjs/microservices)
 *   **Database:** PostgreSQL (TypeORM)
+*   **Monitoring Dashboard:** React (real-time WebSocket)
 *   **Infrastructure:** Docker, Docker Compose
-*   **Caching/Rate Limiting:** Redis (ready for implementation)
+*   **Caching/Rate Limiting:** Redis
 
+---
 
 ## 💎 Key Engineering Features
 
@@ -31,29 +32,42 @@ This project demonstrates a classic **Event-Driven Architecture** to solve commo
 *   **PostgreSQL JSONB Optimization:** Specialized schema using `jsonb` for analytical payloads, combining the flexibility of NoSQL with the reliability of SQL.
 *   **Strict Type Safety:** 100% TypeScript coverage with automated DTO validation via `class-validator` and `ValidationPipe`.
 *   **Resilient Infrastructure:** Multi-stage Docker builds and automated health checks to ensure reliable service orchestration.
+*   **Real-Time React Dashboard:** Live monitoring of RabbitMQ, PostgreSQL, and Application performance via WebSocket — with browser-triggered load tests.
 
+---
 
 ## 🚦 Getting Started
 
 ### Prerequisites
 *   Docker & Docker Compose
+
 ### Installation & Launch
-``` bash
+```bash
 # 1. Clone the repository
-git clone https://github.com
+git clone https://github.com/roman-shneer/high-load-event-processor
 cd high-load-event-processor
 
 # 2. Spin up the entire infrastructure
-docker-compose up --build 
+docker-compose up --build
 ```
 
+### Access Points
 
-### The API will be available at http://127.0.0.1:3000.
+| Service | URL |
+|---------|-----|
+| **API Gateway** | http://127.0.0.1:3000 |
+| **React Dashboard** | http://127.0.0.1:3001 |
+| **RabbitMQ Management** | http://127.0.0.1:15672 (guest/guest) |
+| **Grafana** | http://127.0.0.1:3002 (admin/admin) |
+| **PostgreSQL** | port 5432 (DBeaver/pgAdmin) |
+
+---
+
 ## 🧪 Testing the Pipeline
 
 Send a Tracking Event
-```
-bash
+
+```bash
 curl -X POST http://127.0.0.1:3000/events/track \
      -H "Content-Type: application/json" \
      -d '{
@@ -66,29 +80,59 @@ curl -X POST http://127.0.0.1:3000/events/track \
 
 <img width="720" height="464" alt="image" src="https://github.com/user-attachments/assets/c6b324c8-774b-4b47-bada-bd6f882947cc" />
 
-## Perfomance test
-artillery run perfomance/main.yml
+---
+
+## 📊 React Monitoring Dashboard
+
+A real-time dashboard built with React that connects to the NestJS backend via WebSocket.
+
+**Live Charts:**
+*   **RabbitMQ Performance** — messages/sec throughput in real-time
+*   **PostgreSQL Performance** — DB write speed and queue depth
+*   **Application Performance** — end-to-end latency across the pipeline
+
+**Load Testing Controls (browser-triggered):**
+*   **Insert 1M** — inserts 1,000,000 events to stress-test the pipeline
+*   **Stress Test** — simulates high-concurrency traffic spikes
+*   Live status indicator shows test progress in real-time
+
+<!-- Add dashboard screenshot here -->
+
+---
+
+## Performance test
+
+artillery run performance/main.yml
+
 <img width="834" height="758" alt="image" src="https://github.com/user-attachments/assets/cc6e5580-c2c2-40c6-b3af-e4b0eea53c58" />
 
+artillery run performance/insert1m.yml
 
-artillery run perfomance/insert1m.yml
 <img width="818" height="920" alt="image" src="https://github.com/user-attachments/assets/68d5b8f9-15a5-4401-ad4e-44b84dc9b1f8" />
 
+---
+
 ### Monitoring
+
 RabbitMQ Management: http://127.0.0.1:15672 (guest/guest)
 
 Postgres: Connect via DBeaver/pgAdmin on port 5432
 
 #### Graphana
-http://127.0.0.1:3001/
+
+http://127.0.0.1:3002/
 Add connection http://prometheus:9090
 
-user:admin
+user: admin
 
-password:admin
+password: admin
 
 Import graphana_dashboard.json
 
 <img width="1518" height="744" alt="image" src="https://github.com/user-attachments/assets/b563d5a9-d711-4526-9477-553b20992e1b" />
 
+---
 
+## License
+
+MIT License
