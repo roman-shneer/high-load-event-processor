@@ -44,7 +44,7 @@ This project demonstrates a classic **Event-Driven Architecture** to solve commo
 ### Installation & Launch
 ```bash
 # 1. Clone the repository
-git clone https://github.com/roman-shneer/high-load-event-processor
+git clone https://github.com/roman-shneer/high-load-event-processor.git
 cd high-load-event-processor
 
 # 2. Spin up the entire infrastructure
